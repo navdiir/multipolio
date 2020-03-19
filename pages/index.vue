@@ -31,7 +31,7 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text @click="dialog = false">Cancelar</v-btn>
-                                <v-btn color="blue darken-1" text :disabled="!name || name.length<3 || players>5 || players<2?true:false" @click="confirmDialog= true;">Empezar</v-btn>
+                                <v-btn color="blue darken-1" text :disabled="!name || name.length<3 || players>6 || players<2?true:false" @click="confirmDialog= true;">Empezar</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -75,13 +75,13 @@ export default {
         rules2: [
             value => !!value || 'Requerido (Solo números).',
             value => Number(value) == NaN|| 'Solo números.',
-            value => Number(value)<2  || 'Mínimo 2 jugadores',
-            value => Number(value)>5  || 'Máximo 5 jugadores'
+            value => Number(value)<2  || 'Mínimo 2 jugadores.',
+            value => Number(value)>6  || 'Máximo 6 jugadores.'
         ]
     }),
     methods:{
         async startGame(){
-            await Promise.all([this.setName(this.name),this.setCantPlayers(Number(this.players))]);
+            await Promise.all([this.setName(this.name),this.setCantPlayers(Number(this.players-1))]);
             this.$router.push({name:'game-id',params:{id:'123'}});
         },
         ...mapActions({
@@ -94,7 +94,7 @@ export default {
             return this.name?this.name.toUpperCase():this.name
         },
         errorPlayers(){
-            return !this.players?{state:true,val:'Requerido.'}:Number(this.players)==NaN?{state:true,val:'Solo números.'}:Number(this.players)<2?{state:true,val:'Mínimo 2 jugadores'}:Number(this.players)>5?{statue:true,val:'Máximo 5 jugadores'}:{statue:false,val:''}
+            return !this.players?{state:true,val:'Requerido.'}:Number(this.players)==NaN?{state:true,val:'Solo números.'}:Number(this.players)<2?{state:true,val:'Mínimo 2 jugadores'}:Number(this.players)>5?{statue:true,val:'Máximo 6 jugadores'}:{statue:false,val:''}
         }
     }
 }
