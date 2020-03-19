@@ -23,7 +23,7 @@
                                             <v-text-field v-model="name" label="Nombre" :rules="rules" hide-details="auto" counter maxlength="15" />
                                         </v-col>
                                         <v-col cols="12" sm="6" md="4">
-                                            <v-text-field type="number" min="2" max="5" v-model="players" label="Cantidad jugadores" persistent-hint :hint="players==2?'Mínimo 2 jugadores':players==5?'Máximo 5 jugadores':''" />
+                                            <v-text-field type="number" :error="errorPlayers.state" :error-messages="errorPlayers.val" hide-details="auto" v-model="players" label="Cantidad jugadores"  />
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -31,7 +31,7 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text @click="dialog = false">Cancelar</v-btn>
-                                <v-btn color="blue darken-1" text :disabled="!name || name.length<3?true:false" @click="confirmDialog= true;">Empezar</v-btn>
+                                <v-btn color="blue darken-1" text :disabled="!name || name.length<3 || players>5 || players<2?true:false" @click="confirmDialog= true;">Empezar</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -69,8 +69,14 @@ export default {
         name: null,
         players: 2,
         rules: [
-            value => !!value || 'Required.',
-            value => (value && value.length >= 3) || 'Min 3 characters',
+            value => !!value || 'Requerido.',
+            value => (value && value.length >= 3) || 'Mínimo 3 caracteres.',
+        ],
+        rules2: [
+            value => !!value || 'Requerido (Solo números).',
+            value => Number(value) == NaN|| 'Solo números.',
+            value => Number(value)<2  || 'Mínimo 2 jugadores',
+            value => Number(value)>5  || 'Máximo 5 jugadores'
         ]
     }),
     methods:{
@@ -86,6 +92,9 @@ export default {
     computed:{
         nameUC(){
             return this.name?this.name.toUpperCase():this.name
+        },
+        errorPlayers(){
+            return !this.players?{state:true,val:'Requerido.'}:Number(this.players)==NaN?{state:true,val:'Solo números.'}:Number(this.players)<2?{state:true,val:'Mínimo 2 jugadores'}:Number(this.players)>5?{statue:true,val:'Máximo 5 jugadores'}:{statue:false,val:''}
         }
     }
 }

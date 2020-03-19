@@ -79,7 +79,7 @@
                                     </v-slide-group>
                                 </v-col>
                                 <v-col align="center" cols="2" class="py-0">
-                                    <p class="mb-0 white--text">1 <v-icon color="white" large>mdi-human-handsup</v-icon> <br> Salga libre de la carcel</p> 
+                                    <p class="mb-0 white--text"><span class="font-weight-bold headline">1</span> <v-icon color="white" large>mdi-human-handsup</v-icon> <br> Salga libre de la carcel</p> 
                                 </v-col>
                             </v-row>
                         </v-container>
