@@ -94,7 +94,7 @@ export default {
             return this.name?this.name.toUpperCase():this.name
         },
         errorPlayers(){
-            return !this.players?{state:true,val:'Requerido.'}:Number(this.players)==NaN?{state:true,val:'Solo números.'}:Number(this.players)<2?{state:true,val:'Mínimo 2 jugadores'}:Number(this.players)>5?{statue:true,val:'Máximo 6 jugadores'}:{statue:false,val:''}
+            return !this.players?{state:true,val:'Requerido.'}:Number(this.players)==NaN?{state:true,val:'Solo números.'}:Number(this.players)<2?{state:true,val:'Mínimo 2 jugadores'}:Number(this.players)>6?{statue:true,val:'Máximo 6 jugadores'}:{statue:false,val:''}
         }
     }
 }
