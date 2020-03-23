@@ -24,10 +24,12 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '@mdi/font/css/materialdesignicons.css'
+    '@mdi/font/css/materialdesignicons.css',
+    'sweetalert2/dist/sweetalert2.min.css'
   ],
   env: {
-    baseUrl: 'http://localhost:3000'
+    baseUrl: 'http://localhost:3000',
+    // baseUrl: 'https://multipolio.herokuapp.com'
   },
   server:{
     port: 3000,
@@ -37,6 +39,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    {src: '~/plugins/socket-io.js',ssr:false},
+    {src: '~/plugins/rolldie.js', ssr:false}
   ],
   /*
   ** Nuxt.js dev-modules
@@ -48,6 +52,7 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    'vue-sweetalert2/nuxt'
   ],
   /*
   ** vuetify module configuration

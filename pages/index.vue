@@ -81,12 +81,11 @@ export default {
     }),
     methods:{
         async startGame(){
-            await Promise.all([this.setName(this.name),this.setCantPlayers(Number(this.players-1))]);
-            this.$router.push({name:'game-id',params:{id:'123'}});
+            const res = await this.setupGame({name:this.name,players:this.players,id:this.$socket.client.id});
+            this.$router.push({name:'game-id',params:{id:res.id}});
         },
         ...mapActions({
-            setName: 'player/setName',
-            setCantPlayers: 'game/setCantPlayers'
+            setupGame: 'game/setupGame'
         })
     },
     computed:{

@@ -1,0 +1,230 @@
+{
+    "chance": [
+        {
+            "id": "1",
+            "title": "Ha sido electo presidente.",
+            "action": "-",
+            "cant": "50",
+            "to": "players"
+        },
+        {
+            "id": "2",
+            "title": "Avanza hasta el Ferrocarril Reading.",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "3",
+            "title": "Avance hasta Plaza San Carlos.",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "4",
+            "title": "Avance hasta el ferrocarril más cercano y pague al dueño el doble del valor del aquiler. Si la propiedad está libre puede comprarla del banco.",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "5",
+            "title": "Avance hasta la utilidad más cercana y pague al dueño el doble del valor del aquiler. Si la propiedad está libre puede comprarla del banco.",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "6",
+            "title": "Haga reparaciones generales a todas sus propiedades. Por cada casa pague $25 y por cada hotel $100.",
+            "action": "-",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "7",
+            "title": "Salga libre de la carcel.",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "8",
+            "title": "Avance hasta GO.",
+            "action": "+",
+            "cant": "200",
+            "to": "bank"
+        },
+        {
+            "id": "9",
+            "title": "Pague el impuesto a los pobres.",
+            "action": "-",
+            "cant": "15",
+            "to": "bank"
+        },
+        {
+            "id": "10",
+            "title": "Avance hasta la Avenida Illinois",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "11",
+            "title": "Avance hasta el ferrocarril más cercano y pague al dueño el doble del valor del aquiler. Si la propiedad está libre puede comprarla del banco.",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "12",
+            "title": "El banco de dará un dividendo.",
+            "action": "+",
+            "cant": "50",
+            "to": "bank"
+        },
+        {
+            "id": "13",
+            "title": "Se venció el plazo de su plazo de ahorros.",
+            "action": "+",
+            "cant": "150",
+            "to": "bank"
+        },
+        {
+            "id": "14",
+            "title": "Vaya a caminar por Paseo Tablada.",
+            "action": "-",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "15",
+            "title": "¡A la carcel!",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "16",
+            "title": "Retroceda 3 espacios.",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        }
+    ],
+    "chest": [
+        {
+            "id": "1",
+            "title": "¡Devolución de impuestos!",
+            "action": "+",
+            "cant": "20",
+            "to": "bank"
+        },
+        {
+            "id": "2",
+            "title": "Ha ganado el segundo lugar en un certamen de belleza.",
+            "action": "+",
+            "cant": "10",
+            "to": "bank"
+        },
+        {
+            "id": "3",
+            "title": "Apertura de la opera.",
+            "action": "+",
+            "cant": "50",
+            "to": "players"
+        },
+        {
+            "id": "4",
+            "title": "Avance hasta GO.",
+            "action": "+",
+            "cant": "200",
+            "to": "bank"
+        },
+        {
+            "id": "5",
+            "title": "¡A la carcel!",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "6",
+            "title": "Contribución para las escuelas.",
+            "action": "-",
+            "cant": "150",
+            "to": "bank"
+        },
+        {
+            "id": "7",
+            "title": "Usted tiene una herencia.",
+            "action": "+",
+            "cant": "100",
+            "to": "bank"
+        },
+        {
+            "id": "8",
+            "title": "El hospital le exige una contribución.",
+            "action": "-",
+            "cant": "50",
+            "to": "bank"
+        },
+        {
+            "id": "9",
+            "title": "Por la venta de sus acciones.",
+            "action": "+",
+            "cant": "45",
+            "to": "bank"
+        },
+        {
+            "id": "10",
+            "title": "Salga libre de la carcel",
+            "action": "+",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "11",
+            "title": "Error del banco a tu favor.",
+            "action": "+",
+            "cant": "200",
+            "to": "bank"
+        },
+        {
+            "id": "12",
+            "title": "Su seguro de vida está avanzado.",
+            "action": "+",
+            "cant": "100",
+            "to": "bank"
+        },
+        {
+            "id": "13",
+            "title": "Su esposa ha dado a luz.",
+            "action": "-",
+            "cant": "100",
+            "to": "bank"
+        },
+        {
+            "id": "14",
+            "title": "Se te impone las reparaciones de la ciudad. Pagar $40 por casa y $115 por hotel.",
+            "action": "-",
+            "cant": "0",
+            "to": "bank"
+        },
+        {
+            "id": "15",
+            "title": "Cumplio el plazo de ahorros para navidad.",
+            "action": "+",
+            "cant": "100",
+            "to": "bank"
+        },
+        {
+            "id": "16",
+            "title": "Ha prestado sus servicios.",
+            "action": "+",
+            "cant": "25",
+            "to": "bank"
+        }
+    ]
+}

@@ -3,8 +3,11 @@ import { ready } from 'consola';
 import { Nuxt, Builder } from 'nuxt';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import routes from './routes';
 import cors from 'cors';
 import { createServer } from 'http';
+import './database';
+import socketIO from './socketio';
 
 // Import and Set Nuxt.js options
 import config from '../nuxt.config.js'
@@ -14,11 +17,13 @@ async function start () {
 
   const app = express();
   const server = createServer(app);
+  socketIO(server);
   app.use(bodyParser.urlencoded({extended:false}));
   app.use(bodyParser.json());
   app.use(cookieParser());
   app.use(cors({credentials:true}))
 
+  app.use('/api',routes);
 
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
