@@ -148,6 +148,18 @@ export const actions = {
             res('ok')
         });
     },
+    loseGame({commit},val){
+        return new Promise(async (res,rej)=>{
+            await fetch(`/api/game/lose/${val.idGame}/${val.idPlayer}`,{
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'PUT'
+            });
+            res('ok');
+        })
+    },
     updateTurns({commit},val){
         return new Promise(async (res,rej)=>{
             const res1 = await fetch(`/api/game/updateTurns/${val.idGame}`,{

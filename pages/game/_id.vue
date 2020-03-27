@@ -24,7 +24,7 @@
                             </v-row>
                             <v-row v-else>
                                 <v-col cols="6" align="center"> <v-btn :disabled="!canRoll" @click.stop="rollDice" small>Tirar dados</v-btn> </v-col>
-                                <v-col cols="6" align="center"> <v-btn small>Rendirse</v-btn> </v-col>
+                                <v-col cols="6" align="center"> <v-btn @click="gg" small>Rendirse</v-btn> </v-col>
                             </v-row>
                         </v-container>
                     </v-card>
@@ -42,7 +42,7 @@
                                 <v-list-item two-line>
                                     <v-list-item-content>
                                         <v-list-item-title class="text-no-wrap title mb-1">{{player.name}}</v-list-item-title>
-                                        <v-list-item-subtitle>Jugador N°{{indexPlayer+1}}</v-list-item-subtitle>
+                                        <v-list-item-subtitle>Jugador N°{{indexPlayer+1}} {{player.loss?` - Perdió`:''}}</v-list-item-subtitle>
                                     </v-list-item-content>
                                     <v-list-item-avatar tile size="55" class="my-2"><v-img :src="require(`~/assets/avatars/${player.image}.png`)" /></v-list-item-avatar>
                                 </v-list-item>
@@ -187,7 +187,7 @@ export default {
             this.$socket.client.emit('activeStatus', {room:this.$route.params.id});
         },
         setPartials({dices,turn}){
-            this.partialResults.push({turn,sum:dices[0]+dices[1]});
+            this.partialResults.push({turn,sum:dices});
         },
         askTR({name,room}){
             this.$socket.client.emit('answerTR', {name,room,turn:this.turn,round:this.round});
@@ -197,6 +197,14 @@ export default {
                 this.turn=turn;
                 this.round=round;
             }
+        },
+        lossGame(id){
+            this.$swal({
+                icon: 'error',
+                iconHtml: '<i class="mdi mdi-emoticon-sad-outline"></i>',
+                title: 'Alguien se rindió',
+                text: `El jugador ${this.game.players.filter(e=>e.idPlayer==id)[0].name.toUpperCase()} se rindió.`
+            })
         },
         updateTurns({players}){
             this.$swal({
@@ -208,28 +216,43 @@ export default {
                 html: players
             })
         },
-        /* getRollD({dices}){
+        getRollD({dices}){
+            this.$swal({
+                toast:true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 4000,
+                icon: 'warning',
+                title: '¡Dobles! Se volverá a tirar'
+            })
             this.dices=true;
             let $dicebox = document.getElementById('dicesbox');
             const response = (val) => { 
-                if(val[0]+val[1]==12){
-                    this.sumdices=val[0]+val[1];
-                } else {
-                    this.sumdices=val[0]+val[1];
+                // if(val[0]==val[1]){
+                    this.sumdices=this.sumdices+val[0]+val[1];
+                // } else {
+                    // this.sumdices=val[0]+val[1];
                     setTimeout(()=>{
-                        this.dices=false;
-                        this.sumdices=null;
-                        if(this.totalTurns==this.turn){
-                            this.turn=1;
-                            this.round=this.round+1;
-                        } else {
-                            this.turn=this.turn+1;
-                        }
+                        // this.dices=false;
+                        // this.sumdices=null;
+                        // if(this.totalTurns==this.turn){
+                        //     this.turn=1;
+                        //     this.round=this.round+1;
+                        // } else {
+                        //     this.turn=this.turn+1;
+                        // }
                     },2500);
-                }
+                // }
             }
-            this.rollADie({element:$dicebox,numberOfDice:2,callback:response,delay:2500,values:[...dices]});
-        }, */
+            if($dicebox){
+                this.rollADie({element:$dicebox,numberOfDice:2,callback:response,delay:2500,values:[...dices]});
+            } else {
+                setTimeout(()=>{
+                    $dicebox = document.getElementById('dicesbox');
+                    this.rollADie({element:$dicebox,numberOfDice:2,callback:response,delay:2500,values:[...dices]});
+                },100);            
+            }
+        },
         getRoll({dices}){
             this.dices=true;
             let $dicebox = document.getElementById('dicesbox');
@@ -237,7 +260,7 @@ export default {
                 // if(val[0]+val[1]==12){
                 //     this.sumdices=val[0]+val[1];
                 // } else {
-                    this.sumdices=val[0]+val[1];
+                    this.sumdices=this.sumdices+val[0]+val[1];
                     setTimeout(()=>{
                         this.dices=false;
                         this.sumdices=null;
@@ -288,49 +311,55 @@ export default {
         sumdices:null,
         turn: 1,
         round: 1,
-        partialResults: []
+        partialResults: [],
+        dobleDice: 0
     }),
     methods:{
         async rollDice(){
             this.dices=true;
             let $dicebox = document.getElementById('dicesbox');
             const response = (val) => { 
-                // if(val[0]+val[1]==12){
-                //     if(this.sumdices<24){
-                //         this.$swal({
-                //             toast:true,
-                //             position: 'top',
-                //             showConfirmButton: false,
-                //             timer: 4000,
-                //             icon: 'warning',
-                //             title: '¡Dobles! Se volverá a tirar'
-                //         })
-                //         this.$socket.client.emit('rollDobles', {room:this.$route.params.id,dices:val});
-                //         this.sumdices=val[0]+val[1];
-                //         setTimeout(async ()=>{
-                //             $dicebox = document.getElementById('dicesbox');
-                //             this.rollADie({element:$dicebox,numberOfDice:2,callback:response,delay:2500});
-                //         },2500);
-                //     } else {
-                //         this.$swal({
-                //             toast:true,
-                //             position: 'top',
-                //             showConfirmButton: false,
-                //             timer: 4000,
-                //             icon: 'error',
-                //             title: 'Ha sacado doble 3 veces, irás a la carcel.'
-                //         })
-                //     }
-                // } else {
-                    this.$socket.client.emit('rollDices', {room:this.$route.params.id,dices:val});
-                    if(this.round==1){
-                        this.$socket.client.emit('setPartial', {room:this.$route.params.id,dices:val,turn:this.turn});
-                        this.partialResults.push({turn:this.turn,sum:val[0]+val[1]});
+                if(val[0]==val[1]){
+                    this.dobleDice+=1;
+                    if(this.dobleDice<3){
+                        this.$swal({
+                            toast:true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 4000,
+                            icon: 'warning',
+                            title: '¡Dobles! Se volverá a tirar'
+                        })
+                        this.$socket.client.emit('rollDobles', {room:this.$route.params.id,dices:val});
+                        this.sumdices=this.sumdices+val[0]+val[1];
+                        setTimeout(async ()=>{
+                            $dicebox = document.getElementById('dicesbox');
+                            this.rollADie({element:$dicebox,numberOfDice:2,callback:response,delay:2500});
+                        },2500);
+                    } else {
+                        this.dices=false;
+                        this.$socket.client.emit('rollDobles', {room:this.$route.params.id,dices:val});
+                        this.$swal({
+                            toast:true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 4000,
+                            icon: 'error',
+                            title: 'Ha sacado doble 3 veces, irás a la carcel.'
+                        })
+                        this.dobleDice=0;
                     }
-                    this.sumdices=val[0]+val[1];
+                } else {
+                    this.$socket.client.emit('rollDices', {room:this.$route.params.id,dices:val});
+                    this.sumdices=this.sumdices+val[0]+val[1];
+                    if(this.round==1){
+                        this.$socket.client.emit('setPartial', {room:this.$route.params.id,dices:this.sumdices,turn:this.turn});
+                        this.partialResults.push({turn:this.turn,sum:this.sumdices});
+                    }
                     setTimeout(async ()=>{
                         this.dices=false;
                         this.sumdices=null;
+                        this.dobleDice=0;
                         if(this.totalTurns==this.turn){
                             this.turn=1;
                             this.round=this.round+1;
@@ -353,7 +382,7 @@ export default {
                             this.turn=this.turn+1;
                         }
                     },2500);
-                // }
+                }
             }
             if($dicebox){
                 this.rollADie({element:$dicebox,numberOfDice:2,callback:response,delay:2500});
@@ -373,6 +402,22 @@ export default {
         },
         leaveGame(){
             this.$router.push({name:'index'});
+        },
+        async gg(){
+            const cookies = new Cookie();
+            await this.loseGameG({idGame:this.$route.params.id,idPlayer:cookies.get('id')});
+            this.$socket.client.emit('lossGame', {room:this.$route.params.id,id:cookies.get('id')});
+            this.$swal({
+                icon: 'error',
+                iconHtml: '<i class="mdi mdi-emoticon-sad-outline"></i>',
+                title: 'Alguien se rindió',
+                text: `El jugador ${this.game.name.toUpperCase()} se rindió.`
+            }).then((result)=>{
+                if(result.value){
+                    this.$router.push({name:'index'});
+                    cookies.remove('id',{path:'/'});
+                }
+            });
         },
         async joinGame(){
             const cre = await this.setupGame({name:this.name,id:this.$socket.client.id,idGame:this.$route.params.id});
@@ -413,7 +458,8 @@ export default {
             removeFG: 'game/removePlayer',
             startGM: 'game/startGame',
             updateT: 'game/updateTurns',
-            updateMyself: 'game/updateMyself'
+            updateMyself: 'game/updateMyself',
+            loseGameG: 'game/loseGame'
         })
     },
     computed:{
@@ -460,6 +506,13 @@ export default {
     }
     .v-input--switch label {
         color: white;
+    }
+}
+
+.swal2-error{
+    border-color: transparent !important;
+    .swal2-icon-content{
+        font-size: 6em !important;
     }
 }
 </style>

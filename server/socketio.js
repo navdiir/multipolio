@@ -37,6 +37,11 @@ export default function (server){
             socket.to(id).emit('removeGame',{room});
         });
 
+        socket.on('lossGame',({room,id})=>{
+            socket.to(room).emit('lossGame',id);
+            socket.to(room).emit('updatePlayers',room);
+        });
+
         socket.on('rollDices',({room,dices})=>{
             socket.to(room).emit('getRoll',{dices});
         });

@@ -11,5 +11,6 @@ app.put('/removePlayer/:id', gameController.removePlayer);
 app.put('/updateStatus/:id', gameController.updateStatus);
 app.put('/startGame/:id', gameController.startGame);
 app.put('/updateTurns/:id', gameController.updateTurns);
+app.put('/lose/:id/:idPlayer', gameController.loseGame);
 
 export default app;

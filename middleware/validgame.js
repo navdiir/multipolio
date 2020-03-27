@@ -26,7 +26,8 @@ export default async function({store,route,error,req}){
             error({
                 message: 'El juego no existe',
                 statusCode: 404
-            })
+            });
+            cookies.remove('id',{path:'/'});
         } else if(cookies.get('id')){
             await store.dispatch('game/updateStatus',{idGame:route.params.id,status:false,cookies:cookies.get('id')});
             await store.dispatch('game/returnGame',{data,id:cookies.get('id')});
@@ -35,11 +36,13 @@ export default async function({store,route,error,req}){
                 message: 'Los jugadores ya estan completos',
                 statusCode: 404
             })
+            cookies.remove('id',{path:'/'});
         } else if(data.start){
             error({
                 message: 'El juego ya inicio.',
                 statusCode: 404
             })
+            cookies.remove('id',{path:'/'});
         }
     }
 }

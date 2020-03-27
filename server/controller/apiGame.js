@@ -29,6 +29,13 @@ export async function joinGame(req,res){
     return res.json(game);
 }
 
+export async function loseGame(req,res){
+    const game = await Game.findById(req.params.id);
+    game.players[game.players.map(e=>e.idPlayer).indexOf(req.params.idPlayer)].loss=true;
+    await game.save();
+    return res.json(game);
+}
+
 export async function updateStatus(req,res){
     const game = await Game.findById(req.params.id);
     for(let indexPlayer in game.players){
