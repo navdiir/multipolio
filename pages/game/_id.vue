@@ -61,7 +61,8 @@
                     </v-card>
                 </v-col>
                 <v-col cols="8">
-                    <v-img contain :aspect-ratio="16/9" :src="require('~/assets/ingame.jpg')"></v-img>
+                    <board-game  />
+                    <!-- <v-img contain :aspect-ratio="16/9" :src="require('~/assets/ingame.jpg')"></v-img> -->
                 </v-col>
                 <v-col cols="2">
                     <v-card height="100%" color="amber lighten-4">
@@ -163,8 +164,12 @@
 <script>
 import {mapState,mapActions} from 'vuex';
 import Cookie from 'universal-cookie';
+import boardGame from '~/components/table';
 
 export default {
+    components:{
+        'board-game': boardGame
+    },
     beforeMount(){
         if(!this.game.name){
             this.dialog=true;
@@ -228,21 +233,7 @@ export default {
             this.dices=true;
             let $dicebox = document.getElementById('dicesbox');
             const response = (val) => { 
-                // if(val[0]==val[1]){
-                    this.sumdices=this.sumdices+val[0]+val[1];
-                // } else {
-                    // this.sumdices=val[0]+val[1];
-                    setTimeout(()=>{
-                        // this.dices=false;
-                        // this.sumdices=null;
-                        // if(this.totalTurns==this.turn){
-                        //     this.turn=1;
-                        //     this.round=this.round+1;
-                        // } else {
-                        //     this.turn=this.turn+1;
-                        // }
-                    },2500);
-                // }
+                this.sumdices=this.sumdices+val[0]+val[1];
             }
             if($dicebox){
                 this.rollADie({element:$dicebox,numberOfDice:2,callback:response,delay:2500,values:[...dices]});
@@ -257,21 +248,17 @@ export default {
             this.dices=true;
             let $dicebox = document.getElementById('dicesbox');
             const response = (val) => { 
-                // if(val[0]+val[1]==12){
-                //     this.sumdices=val[0]+val[1];
-                // } else {
-                    this.sumdices=this.sumdices+val[0]+val[1];
-                    setTimeout(()=>{
-                        this.dices=false;
-                        this.sumdices=null;
-                        if(this.totalTurns==this.turn){
-                            this.turn=1;
-                            this.round=this.round+1;
-                        } else {
-                            this.turn=this.turn+1;
-                        }
-                    },2500);
-                // }
+                this.sumdices=this.sumdices+val[0]+val[1];
+                setTimeout(()=>{
+                    this.dices=false;
+                    this.sumdices=null;
+                    if(this.totalTurns==this.turn){
+                        this.turn=1;
+                        this.round=this.round+1;
+                    } else {
+                        this.turn=this.turn+1;
+                    }
+                },2500);
             }
             if($dicebox){
                 this.rollADie({element:$dicebox,numberOfDice:2,callback:response,delay:2500,values:[...dices]});
