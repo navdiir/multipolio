@@ -2,7 +2,7 @@
     <v-container class="pa-0">
         <v-row justify="center" :key="indexRow" v-for="(row, indexRow) in 11">
             <v-col :style="styleColumn(indexRow,indexColumn)" cols="auto" class="pa-0" :key="`${indexRow}${indexColumn}`" v-for="(column, indexColumn) in 11">
-                <v-card style="border:0.05em solid black;" height="100%" color="#cde6d0" v-if="indexRow==0 || indexRow==10 || indexColumn==0 || indexColumn==10" >
+                <v-card style="position:absolute;border:0.05em solid black;" width="100%" height="100%" color="#cde6d0" v-if="indexRow==0 || indexRow==10 || indexColumn==0 || indexColumn==10" >
                     <template v-if="dataCard(indexRow,indexColumn).color">
                         <div style="height:100%;" class="d-flex align-center flex-column">
                             <v-sheet width="100%" :color="dataCard(indexRow,indexColumn).color">&nbsp;</v-sheet>
@@ -20,6 +20,13 @@
                         <v-img contain :aspect-ratio="specialCard(indexRow,indexColumn).ratio"  :src="require(`~/assets/board/${specialCard(indexRow,indexColumn).img}`)"></v-img>
                     </template>
                 </v-card>
+                <v-container v-if="playersIn(indexRow,indexColumn).length!=0" style="height:100%;top:0;left:0;position:absolute;z-index:999;">
+                    <v-row style="position:relative">
+                        <v-col style="position:relative;" class="pa-0" cols="4" v-for="(player,indexPlayer) in positions" :key="indexPlayer">
+                            <v-avatar size="25" color="red accent-4"><v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${player.img}.png`)" /></v-avatar>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-col>    
         </v-row>
     </v-container>
@@ -29,12 +36,16 @@
 import properties from '~/assets/properties.json';
 
 export default {
+    props: ['positions'],
     data: () => ({
         properties
     }),
     computed:{
         dataCard(){
             return (row,col) => { return this.properties.filter(e=>e.row==row && e.col==col)[0] }
+        },
+        playersIn(){
+            return (row,col) => { return this.positions.filter(e=>e.row==row && e.column==col) }
         },
         imgCard(){
             return (row,col) => {
@@ -76,15 +87,15 @@ export default {
             return (row,col) => {
                 if(row==0 || row==10){
                     if(col==0 || col==10){ 
-                        return 'height:76.6px;width:76.6px !important;background-color:#cde6d0;'
+                        return 'position:relative;height:76.6px;width:76.6px !important;background-color:#cde6d0;'
                     } else {
-                        return `height:76.6px;width:76.6px; !important;background-color:#cde6d0;transform: rotate(${row==0?'180':'0'}deg)`
+                        return `position:relative;height:76.6px;width:76.6px; !important;background-color:#cde6d0;transform: rotate(${row==0?'180':'0'}deg)`
                     }
                 } else {
                     if(col==0 || col==10){
-                        return `height:76.6px;width:76.6px !important;background-color:#cde6d0;transform: rotate(${col==0?'90':'-90'}deg)`
+                        return `position:relative;height:76.6px;width:76.6px !important;background-color:#cde6d0;transform: rotate(${col==0?'90':'-90'}deg)`
                     } else {
-                        return 'height:76.6px;width:76.6px;background-color:#cde6d0;'
+                        return 'position:relative;height:76.6px;width:76.6px;background-color:#cde6d0;'
                     }
                 }
             }

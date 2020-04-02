@@ -13,10 +13,14 @@ export const state = () => ({
     totalPlayers: null,
     start: false,
     creator: false,
-    returning: false
+    returning: false,
+    avatarsUsed: []
 })
 
 export const mutations = {
+    setAvatarsUsed(state,val){
+        state.avatarsUsed = [...val];
+    },
     setupGame(state,val){
         let me = val.data.players.filter(e=>e.idPlayer==val.id)[0];
         let others = val.data.players.filter(e=>e.idPlayer!=val.id);
@@ -65,6 +69,9 @@ export const mutations = {
 }
 
 export const actions = {
+    setAvatarsUsed({commit},val){
+        commit('setAvatarsUsed',val);
+    },
     setupGame({commit},val){
         return new Promise(async (res,rej)=>{
             const res1 = await fetch('/api/game/create',{

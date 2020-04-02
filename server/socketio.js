@@ -13,8 +13,8 @@ export default function (server){
             }
         });
 
-        socket.on('answerTR',({name,room,turn,round})=>{
-            socket.to(room).emit('answerTR',{name,turn,round});
+        socket.on('answerTR',({name,room,turn,round,positions})=>{
+            socket.to(room).emit('answerTR',{name,turn,round,positions});
         });
 
         socket.on('activeStatus',({room})=>{

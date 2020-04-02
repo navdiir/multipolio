@@ -17,14 +17,14 @@ export async function createGame(req,res){
     const newGame = new Game();
     newGame.totalPlayers = Number(req.body.players);
     newGame.start = false;
-    newGame.players.push({ name: req.body.name, idPlayer: req.body.id, creator: true, cash: 1500, turn: 1,image: 'dog', freePass: 0, properties: [], active: false, loss: false });
+    newGame.players.push({ name: req.body.name, idPlayer: req.body.id, creator: true, cash: 1500, turn: 1,image: req.body.avatar, freePass: 0, properties: [], active: false, loss: false });
     await newGame.save();
     return res.json(newGame);
 }
 
 export async function joinGame(req,res){
     const game = await Game.findById(req.params.id);
-    game.players.push({ name: req.body.name, idPlayer: req.body.id, creator: false, cash: 1500, turn: game.players.length+1, image: 'cat', freePass:0 , properties: [], active: false, loss: false });
+    game.players.push({ name: req.body.name, idPlayer: req.body.id, creator: false, cash: 1500, turn: game.players.length+1, image: req.body.avatar, freePass:0 , properties: [], active: false, loss: false });
     await game.save();
     return res.json(game);
 }

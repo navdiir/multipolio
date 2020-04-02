@@ -23,8 +23,9 @@
                                 </v-col>
                             </v-row>
                             <v-row v-else>
-                                <v-col cols="6" align="center"> <v-btn :disabled="!canRoll" @click.stop="rollDice" small>Tirar dados</v-btn> </v-col>
-                                <v-col cols="6" align="center"> <v-btn @click="gg" small>Rendirse</v-btn> </v-col>
+                                <v-col cols="4" align="center"> <v-btn @click="infoUser= !infoUser" small>Ver info</v-btn> </v-col>
+                                <v-col cols="4" align="center"> <v-btn :disabled="!canRoll" @click.stop="rollDice" small>Tirar dados</v-btn> </v-col>
+                                <v-col cols="4" align="center"> <v-btn @click="gg" small>Rendirse</v-btn> </v-col>
                             </v-row>
                         </v-container>
                     </v-card>
@@ -44,7 +45,7 @@
                                         <v-list-item-title class="text-no-wrap title mb-1">{{player.name}}</v-list-item-title>
                                         <v-list-item-subtitle>Jugador N°{{indexPlayer+1}} {{player.loss?` - Perdió`:''}}</v-list-item-subtitle>
                                     </v-list-item-content>
-                                    <v-list-item-avatar tile size="55" class="my-2"><v-img :src="require(`~/assets/avatars/${player.image}.png`)" /></v-list-item-avatar>
+                                    <v-list-item-avatar tile size="55" class="my-2"><v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${player.image}.png`)" /></v-list-item-avatar>
                                 </v-list-item>
                                 <v-card-text class="pt-0">
                                     <v-row v-if="game.start" align="center">
@@ -61,8 +62,7 @@
                     </v-card>
                 </v-col>
                 <v-col cols="8">
-                    <board-game  />
-                    <!-- <v-img contain :aspect-ratio="16/9" :src="require('~/assets/ingame.jpg')"></v-img> -->
+                    <board-game :positions="positions" />
                 </v-col>
                 <v-col cols="2">
                     <v-card height="100%" color="amber lighten-4">
@@ -80,36 +80,34 @@
                         </v-card>
                 </v-col>
             </v-row>
-            <v-row v-if="game.start">
-                <v-col cols="12">
-                    <v-card color="indigo darken-1">
-                        <v-container fluid class="py-0">
-                            <v-row align="center">
-                                <v-col cols="2" class="d-flex">
-                                    <v-avatar size="60"><v-img :src="require(`~/assets/avatars/${game.image}.png`)" /></v-avatar>
-                                    <p class="ml-6 text-center ma-0 white--text"><span class="headline font-weight-bold">{{game.name.toUpperCase()}}</span> <br> <span><v-icon large color="success">mdi-cash</v-icon> {{game.cash}}</span></p>
-                                </v-col>
-                                <v-col align="center" cols="8" class="py-0">
-                                    <p class="text-center subtitle-1 mb-0 white--text font-weight-black">PROPIEDADES</p>
-                                    <v-slide-group class="px-4" center-active show-arrows prev-icon="mdi-arrow-left-bold-circle" next-icon="mdi-arrow-right-bold-circle">
-                                        <v-slide-item v-for="n in game.properties" :key="n" v-slot:default="{ active, toggle }" >
-                                            <v-card :color="active ? 'teal lighten-4' : 'white'" class="ma-4" height="50" width="121" @click="toggle" >
-                                                <v-row class="fill-height" align="center" justify="center" >
-                                                    Propiedad {{n}}
-                                                </v-row>
-                                            </v-card>
-                                        </v-slide-item>
-                                        <v-sheet width="100%" v-if="game.properties.length==0" class="transparent white--text text-center">Ninguna al momento.</v-sheet>
-                                    </v-slide-group>
-                                </v-col>
-                                <v-col align="center" cols="2" class="py-0">
-                                    <p class="mb-0 white--text"><span class="font-weight-bold headline">{{game.freePass}}</span> <v-icon color="white" large>mdi-human-handsup</v-icon> <br> Salga libre de la carcel</p> 
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-card>
-                </v-col>
-            </v-row>
+            <v-bottom-sheet v-model="infoUser" inset max-width="90%">
+                <v-card color="indigo darken-1">
+                    <v-container fluid class="py-0">
+                        <v-row align="center">
+                            <v-col cols="2" class="d-flex">
+                                <v-avatar size="60"><v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${game.image}.png`)" /></v-avatar>
+                                <p class="ml-6 text-center ma-0 white--text"><span class="headline font-weight-bold">{{game.name.toUpperCase()}}</span> <br> <span><v-icon large color="success">mdi-cash</v-icon> {{game.cash}}</span></p>
+                            </v-col>
+                            <v-col align="center" cols="8" class="py-0">
+                                <p class="text-center subtitle-1 mb-0 white--text font-weight-black">PROPIEDADES</p>
+                                <v-slide-group class="px-4" center-active show-arrows prev-icon="mdi-arrow-left-bold-circle" next-icon="mdi-arrow-right-bold-circle">
+                                    <v-slide-item v-for="n in game.properties" :key="n" v-slot:default="{ active, toggle }" >
+                                        <v-card :color="active ? 'teal lighten-4' : 'white'" class="ma-4" height="50" width="121" @click="toggle" >
+                                            <v-row class="fill-height" align="center" justify="center" >
+                                                Propiedad {{n}}
+                                            </v-row>
+                                        </v-card>
+                                    </v-slide-item>
+                                    <v-sheet width="100%" v-if="game.properties.length==0" class="transparent white--text text-center">Ninguna al momento.</v-sheet>
+                                </v-slide-group>
+                            </v-col>
+                            <v-col align="center" cols="2" class="py-0">
+                                <p class="mb-0 white--text"><span class="font-weight-bold headline">{{game.freePass}}</span> <v-icon color="white" large>mdi-human-handsup</v-icon> <br> Salga libre de la carcel</p> 
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-card>
+            </v-bottom-sheet>
         </v-container>
         <v-snackbar v-model="snackbar" color="info" :timeout="1000"> {{ logSnackbar }} </v-snackbar>
         <v-dialog max-width="300px" v-model="dices">
@@ -128,8 +126,29 @@
                     <v-card-text>
                         <v-container>
                             <v-row>
-                                <v-col cols="12" sm="6" md="8" offset-md="2">
+                                <v-col cols="12" sm="6" md="8">
                                     <v-text-field v-model="name" label="Nombre" :rules="rules" hide-details="auto" counter maxlength="15" />
+                                </v-col>
+                                <v-col cols="12" sm="6" md="4" align="center">
+                                    <div style="position:relative;">
+                                        <v-avatar class="mb-3 pa-2" color="amber lighten-4" size="120"> <v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${avatar}.png`)" /> </v-avatar>
+                                        <v-dialog max-width="400px">
+                                            <template v-slot:activator="{ on }"> <v-btn v-on="on" fab x-small absolute right top><v-icon>mdi-magnify-plus-outline</v-icon></v-btn> </template>
+                                            <v-card>
+                                                <v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${avatar}.png`)" />
+                                                <v-sheet color="grey lighten-2" class="text-center headline">{{avatars.filter(e=>e.num==avatar)[0].text}}</v-sheet>
+                                            </v-card>
+                                        </v-dialog>
+                                    </div>
+                                    <v-menu>
+                                        <template v-slot:activator="{ on }"> <v-btn small color="primary" v-on="on" > Escoger avatar </v-btn> </template>
+                                        <v-list>
+                                            <v-list-item v-for="(item, index) in avatars" :key="index" @click="avatar=item.num">
+                                                <v-list-item-avatar> <v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${item.num}.png`)"></v-img> </v-list-item-avatar>
+                                                    <v-list-item-content> <v-list-item-title class="" v-text="item.text" /> </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -172,6 +191,8 @@ export default {
     },
     beforeMount(){
         if(!this.game.name){
+            this.avatars = this.avatars.filter(e=>this.avatarsUsed.indexOf(e.num)==-1);
+            this.avatar = this.avatars[0].num;
             this.dialog=true;
         } else if(this.game.returning){
             this.$socket.client.emit('joinGame', {room:this.$route.params.id,name:this.game.name});
@@ -195,12 +216,13 @@ export default {
             this.partialResults.push({turn,sum:dices});
         },
         askTR({name,room}){
-            this.$socket.client.emit('answerTR', {name,room,turn:this.turn,round:this.round});
+            this.$socket.client.emit('answerTR', {name,room,turn:this.turn,round:this.round,positions:this.positions});
         },
-        answerTR({name,turn,round}){
+        answerTR({name,turn,round,positions}){
             if(name==this.game.name){
                 this.turn=turn;
                 this.round=round;
+                this.positions=[...positions]
             }
         },
         lossGame(id){
@@ -270,6 +292,9 @@ export default {
             }
         },
         gameStarted({room}){
+            this.positions = this.game.players.map(e=>{return {id:e.idPlayer,img:e.image,row:10,column:10}});
+            const cookies = new Cookie();
+            this.positions.push({id:cookies.get('id'),row:10,column:10,img:this.game.image});
             this.$swal({
                 toast:true,
                 position: 'top',
@@ -288,6 +313,24 @@ export default {
         dialog: false,
         confirmDialog: false,
         name: null,
+        avatar: "1",
+        avatars:[
+            {num:"1",text:"Barco"},
+            {num:"2",text:"Auto"},
+            {num:"3",text:"Gato"},
+            {num:"4",text:"Helicóptero"},
+            {num:"5",text:"Dinosaurio"},
+            {num:"6",text:"Perro"},
+            {num:"7",text:"Pato"},
+            {num:"8",text:"Plancha"},
+            {num:"9",text:"Guitarra"},
+            {num:"10",text:"Sombrero"},
+            {num:"11",text:"Cesto"},
+            {num:"12",text:"Pingüino"},
+            {num:"13",text:"Anillo"},
+            {num:"14",text:"Robot"},
+            {num:"15",text:"Zapato"}
+        ],
         rules: [
             value => !!value || 'Requerido.',
             value => (value && value.length >= 3) || 'Mínimo 3 caracteres.',
@@ -298,8 +341,10 @@ export default {
         sumdices:null,
         turn: 1,
         round: 1,
+        positions: [],
         partialResults: [],
-        dobleDice: 0
+        dobleDice: 0,
+        infoUser: false
     }),
     methods:{
         async rollDice(){
@@ -407,7 +452,7 @@ export default {
             });
         },
         async joinGame(){
-            const cre = await this.setupGame({name:this.name,id:this.$socket.client.id,idGame:this.$route.params.id});
+            const cre = await this.setupGame({name:this.name,avatar:this.avatar,id:this.$socket.client.id,idGame:this.$route.params.id});
             this.dialog = false;
             this.confirmDialog = false;
             this.logSnackbar = cre;
@@ -430,6 +475,9 @@ export default {
             await this.startGM({idGame:this.$route.params.id});
             this.$socket.client.emit('activeStatus', {room:this.$route.params.id});
             this.$socket.client.emit('gameStarted', {room:this.$route.params.id});
+            this.positions = this.game.players.map(e=>{return {id:e.idPlayer,img:e.image,row:10,column:10}});
+            const cookies = new Cookie();
+            this.positions.push({id:cookies.get('id'),row:10,column:10,img:this.game.image});
             this.$swal({
                 toast:true,
                 position: 'top',
@@ -463,7 +511,8 @@ export default {
             return this.game.players.filter(e=>e.turn==this.turn).length==0;
         },
         ...mapState({
-            game: state => state.game
+            game: state => state.game,
+            avatarsUsed: state => state.game.avatarsUsed
         })
     },
     watch:{

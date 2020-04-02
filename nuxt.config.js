@@ -28,8 +28,8 @@ module.exports = {
     'sweetalert2/dist/sweetalert2.min.css'
   ],
   env: {
-    // baseUrl: 'http://localhost:3000',
-    baseUrl: 'https://multipolio.herokuapp.com'
+    baseUrl: 'http://localhost:3000',
+    // baseUrl: 'https://multipolio.herokuapp.com'
   },
   server:{
     port: 3000,
@@ -59,7 +59,6 @@ module.exports = {
   ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
     theme: {
       themes: {
         dark: {

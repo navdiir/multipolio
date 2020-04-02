@@ -43,6 +43,8 @@ export default async function({store,route,error,req}){
                 statusCode: 404
             })
             cookies.remove('id',{path:'/'});
+        } else {
+            await store.dispatch('game/setAvatarsUsed',data.players.map(e=>e.image))
         }
     }
 }

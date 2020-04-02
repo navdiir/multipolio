@@ -21,9 +21,28 @@
                                     <v-row>
                                         <v-col cols="12" sm="6" md="8">
                                             <v-text-field v-model="name" label="Nombre" :rules="rules" hide-details="auto" counter maxlength="15" />
+                                            <v-text-field style="width:10rem" type="number" :error="errorPlayers.state" :error-messages="errorPlayers.val" hide-details="auto" v-model="players" label="Cantidad jugadores"  />
                                         </v-col>
-                                        <v-col cols="12" sm="6" md="4">
-                                            <v-text-field type="number" :error="errorPlayers.state" :error-messages="errorPlayers.val" hide-details="auto" v-model="players" label="Cantidad jugadores"  />
+                                        <v-col cols="12" sm="6" md="4" align="center">
+                                            <div style="position:relative;">
+                                                <v-avatar class="mb-3 pa-2" color="amber lighten-4" size="120"> <v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${avatar}.png`)" /> </v-avatar>
+                                                <v-dialog max-width="400px">
+                                                    <template v-slot:activator="{ on }"> <v-btn v-on="on" fab x-small absolute right top><v-icon>mdi-magnify-plus-outline</v-icon></v-btn> </template>
+                                                    <v-card>
+                                                        <v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${avatar}.png`)" />
+                                                        <v-sheet color="grey lighten-2" class="text-center headline">{{avatars.filter(e=>e.num==avatar)[0].text}}</v-sheet>
+                                                    </v-card>
+                                                </v-dialog>
+                                            </div>
+                                            <v-menu>
+                                                <template v-slot:activator="{ on }"> <v-btn small color="primary" v-on="on" > Escoger avatar </v-btn> </template>
+                                                <v-list>
+                                                    <v-list-item v-for="(item, index) in avatars" :key="index" @click="avatar=item.num">
+                                                        <v-list-item-avatar> <v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${item.num}.png`)"></v-img> </v-list-item-avatar>
+                                                         <v-list-item-content> <v-list-item-title class="" v-text="item.text" /> </v-list-item-content>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -68,6 +87,24 @@ export default {
         confirmDialog: false,
         name: null,
         players: 2,
+        avatar: '1',
+        avatars:[
+            {num:"1",text:"Barco"},
+            {num:"2",text:"Auto"},
+            {num:"3",text:"Gato"},
+            {num:"4",text:"Helicóptero"},
+            {num:"5",text:"Dinosaurio"},
+            {num:"6",text:"Perro"},
+            {num:"7",text:"Pato"},
+            {num:"8",text:"Plancha"},
+            {num:"9",text:"Guitarra"},
+            {num:"10",text:"Sombrero"},
+            {num:"11",text:"Cesto"},
+            {num:"12",text:"Pingüino"},
+            {num:"13",text:"Anillo"},
+            {num:"14",text:"Robot"},
+            {num:"15",text:"Zapato"}
+        ],
         rules: [
             value => !!value || 'Requerido.',
             value => (value && value.length >= 3) || 'Mínimo 3 caracteres.',
@@ -81,7 +118,7 @@ export default {
     }),
     methods:{
         async startGame(){
-            const res = await this.setupGame({name:this.name,players:this.players,id:this.$socket.client.id});
+            const res = await this.setupGame({name:this.name,players:this.players,avatar:this.avatar,id:this.$socket.client.id});
             this.$router.push({name:'game-id',params:{id:res.id}});
         },
         ...mapActions({
