@@ -20,10 +20,10 @@
                         <v-img contain :aspect-ratio="specialCard(indexRow,indexColumn).ratio"  :src="require(`~/assets/board/${specialCard(indexRow,indexColumn).img}`)"></v-img>
                     </template>
                 </v-card>
-                <v-container v-if="playersIn(indexRow,indexColumn).length!=0" style="height:100%;top:0;left:0;position:absolute;z-index:999;">
-                    <v-row style="position:relative">
-                        <v-col style="position:relative;" class="pa-0" cols="4" v-for="(player,indexPlayer) in positions" :key="indexPlayer">
-                            <v-avatar size="25" color="red accent-4"><v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${player.img}.png`)" /></v-avatar>
+                <v-container class="pa-0" v-if="playersIn(indexRow,indexColumn).length!=0" style="height:100%;top:0;left:0;position:absolute;z-index:999;">
+                    <v-row justify="center" align="center" style="position:relative">
+                        <v-col align="center" style="position:relative;" class="pa-0" cols="4" v-for="(player,indexPlayer) in playersIn(indexRow,indexColumn)" :key="indexPlayer">
+                            <v-avatar size="25" color="red accent-3" ><v-img contain :aspect-ratio="16/9" :src="require(`~/assets/avatars/${player.img}.png`)" /></v-avatar>
                         </v-col>
                     </v-row>
                 </v-container>

@@ -12,5 +12,6 @@ app.put('/updateStatus/:id', gameController.updateStatus);
 app.put('/startGame/:id', gameController.startGame);
 app.put('/updateTurns/:id', gameController.updateTurns);
 app.put('/lose/:id/:idPlayer', gameController.loseGame);
+app.put('/buyProperty/:id/:idPlayer', gameController.buyProperty);
 
 export default app;

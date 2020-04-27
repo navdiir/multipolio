@@ -13,6 +13,15 @@ export async function validGame(req,res){
     return res.json(games);
 }
 
+export async function buyProperty(req,res){
+    const games = await Game.findById(req.params.id);
+    let indexPlayer = games.players.map(e=>e.idPlayer).indexOf(req.params.idPlayer);
+    games.players[indexPlayer].properties.push({idProperty:req.body.num,houses:0,hotels:0});
+    games.players[indexPlayer].cash = games.players[indexPlayer].cash - req.body.price; 
+    await games.save();
+    return res.json(games);
+}
+
 export async function createGame(req,res){
     const newGame = new Game();
     newGame.totalPlayers = Number(req.body.players);

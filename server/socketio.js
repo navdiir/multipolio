@@ -21,6 +21,15 @@ export default function (server){
             socket.to(room).emit('updatePlayers',room);
         });
 
+        socket.on('someoneBuy',({room,name,player})=>{
+            socket.to(room).emit('updatePlayers',room);
+            socket.to(room).emit('someoneBuy',{name,player});
+        });
+
+        socket.on('someoneNoBuy',({room})=>{
+            socket.to(room).emit('someoneNoBuy',room);
+        });
+
         socket.on('updateOthers',({room})=>{
             socket.to(room).emit('updateOthers',room);
         });
@@ -42,8 +51,8 @@ export default function (server){
             socket.to(room).emit('updatePlayers',room);
         });
 
-        socket.on('rollDices',({room,dices})=>{
-            socket.to(room).emit('getRoll',{dices});
+        socket.on('rollDices',({room,dices,playerId})=>{
+            socket.to(room).emit('getRoll',{dices,playerId});
         });
 
         socket.on('rollDobles',({room,dices})=>{

@@ -72,6 +72,21 @@ export const actions = {
     setAvatarsUsed({commit},val){
         commit('setAvatarsUsed',val);
     },
+    buyProperty({commit},val){
+        return new Promise(async (res,rej)=>{
+            const res1 = await fetch(`/api/game/buyProperty/${val.idGame}/${val.idPlayer}`,{
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'PUT',
+                body: JSON.stringify({num:val.num,price:val.price})
+            });
+            const data = await res1.json();
+            commit('updateMyself',data);
+            res('ok');
+        });
+    },
     setupGame({commit},val){
         return new Promise(async (res,rej)=>{
             const res1 = await fetch('/api/game/create',{
